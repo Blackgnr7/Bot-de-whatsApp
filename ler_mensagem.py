@@ -1,21 +1,19 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import re
+from driver_manager import get_driver
 
-driver = webdriver.Edge()
 mensagens_para_ler = int
 
-
 def ler_mensagem_quando_alguem_enviado():
-    print("iniciado")
+    print("denovo")
+    driver = get_driver()
     driver.get("https://web.whatsapp.com/")
     assert "WhatsApp" in driver.title
     wait = WebDriverWait(driver, 10)
-    time.sleep(20)
     elemento = achar_se_tem()
     while True:
         if len(elemento) > 2:
@@ -44,12 +42,13 @@ def ler_mensagem_quando_alguem_enviado():
 
 
 def achar_se_tem():
+    driver = get_driver()
     while True:
         try:
-            elemento = driver.find_elements(
+            elementos = driver.find_elements(
                 By.CSS_SELECTOR, 'span[aria-label*="não lida"]'
             )
             break
         except NoSuchElementException:
             time.sleep(1)
-    return elemento
+    return elementos
